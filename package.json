@@ -1,0 +1,25 @@
+{
+  "name": "track-your-employees",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LonelyMitoc/track-your-employees.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LonelyMitoc/track-your-employees/issues"
+  },
+  "homepage": "https://github.com/LonelyMitoc/track-your-employees#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4",
+    "console.table": "^0.10.0",
+    "mysql2": "^2.3.3"
+  }
+}

@@ -229,6 +229,12 @@ function updateEmployee() {
 
 function viewRoles() {
     connection.query(
-        `SELECT roles.title AS Role, departments.department_name as Department FROM`
-    )
-}
+        'SELECT roles.title AS Role, departments.department_name as Department FROM roles LEFT JOIN departments on roles.department_id = departments.id;',
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            mainMenu();
+        }
+    );
+};
+

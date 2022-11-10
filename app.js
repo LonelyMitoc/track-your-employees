@@ -127,18 +127,18 @@ async function addEmployee() {
                             const res = await inquirer.prompt([
                                 {
                                     type: 'list',
-                                    message: 'Who will the new employee report to?',
+                                    message: 'Who will the new EMPLOYEE report to?',
                                     choices: managers,
                                     name: 'manager',
                                 },
                                 {
                                     type: 'input',
-                                    message: 'Enter the first name of the new employee:',
+                                    message: 'Enter the first name of the new EMPLOYEE:',
                                     name: 'first_name',
                                 },
                                 {
                                     type: 'input',
-                                    message: 'Enter the last name of the new employee:',
+                                    message: 'Enter the last name of the new EMPLOYEE:',
                                     name: 'last_name',
                                 },
                             ]);
@@ -251,7 +251,7 @@ function addRole() {
             },
             {
                 type: 'input',
-                message: 'Please input the name of the role:',
+                message: 'Please input the name of the new ROLE:',
                 name: 'role',
             },
             {
@@ -283,4 +283,26 @@ function viewDepartment() {
             mainMenu();
         }
     );
-}
+};
+
+async function addDepartment() {
+    const response = await inquirer.prompt({
+        type: 'input',
+        message: 'What is the name of the new DEPARTMENT?',
+        name: 'department',
+    });
+
+    if (response.department) {
+        connection.query(
+            `INSERT INTO departments (department_name) VALUES ('${response.department}');`,
+            function (err, res) {
+                if (err) throw err;
+                console.log(`${response.department} department added successfully`);
+                viewDepartment();
+            }
+        );
+    } else {
+        console.log('Please enter a valid name for the new DEPARTMENT.');
+        addDepartment();
+    }
+};

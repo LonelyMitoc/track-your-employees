@@ -13,7 +13,7 @@ connection.connect((err) => {
 //Welcome message when the program is first initialized
 const welcome = () => {
     return inquirer
-        .prompt ([
+        .prompt([
             {
                 type: 'input',
                 message: welcomeMsg + `\nHere you have access to viewing, adding, editing employees, roles and departments information.\nHit ENTER to continue.\n`,
@@ -90,7 +90,7 @@ async function viewEmployee() {
 async function addEmployee() {
     connection.query(
         `SELECT * FROM departments ORDER BY id`,
-        async function(err, availDep) {
+        async function (err, availDep) {
             if (err) throw err;
             const dep = availDep.map((data) => data.department_name);
             const resDep = await inquirer.prompt({
@@ -175,5 +175,60 @@ async function addEmployee() {
             );
         }
     );
-}
+};
 
+function updateEmployee() {
+    connection.query('SELECT * FROM employees', (err, res) => {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    message: `Which employee's role would you like to update?`,
+                    choices: res.map((res) => ({
+                        value: res.id,
+                        name: res.id + ' ' + res.first_name + ' ' + res.last_name,
+                    })),
+                    name: 'selectEmp',
+                },
+            ])
+            .then((result) => {
+                const employeeId = result.selectEmp;
+
+                connection.query('SELECT * FROM roles', (err, res) => {
+                    if (err) throw err;
+                    inquirer
+                        .prompt([
+                            {
+                                type: 'list',
+                                message: `Select the employee's new role:`,
+                                choices: res.map((res) => ({
+                                    value: res.id,
+                                    name: res.id + ' ' + res.title,
+                                })),
+                                name: 'newRole',
+                            },
+                        ])
+                        .then((result) => {
+                            const roleId = result.newRole;
+
+                            connection.query(
+                                'UPDATE employees SET role_id = ? WHERE id = ?',
+                                [roleId, employeeId],
+                                (err, res) => {
+                                    if (err) throw err;
+                                    console.log(`Employee's ROLE updated successfully.`);
+                                }
+                            );
+                            viewEmployee();
+                        });
+                });
+            });
+    });
+};
+
+function viewRoles() {
+    connection.query(
+        `SELECT roles.title AS Role, departments.department_name as Department FROM`
+    )
+}

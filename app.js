@@ -9,7 +9,7 @@ const welcomeMsg = `====== WELCOME TO THE EMPLOYEE MANAGER =======`;
 let connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '<INSERT YOUR ROOT USER PASSWORD HERE>',
     database: 'employee_tracker_db',
 });
 
@@ -19,12 +19,12 @@ connection.connect((err) => {
 });
 
 //Welcome message when the program is first initialized
-const welcome = () => {
+async function welcome() {
     return inquirer
         .prompt([
             {
                 type: 'input',
-                message: welcomeMsg + `\nHere you have access to viewing, adding, editing employees, roles and departments information.\nHit ENTER to continue.\n`,
+                message: welcomeMsg + `\nHere you have access to viewing, adding, editing employees, roles and departments information.\n`,
                 name: 'welcome',
             },
         ])
@@ -47,7 +47,8 @@ async function mainMenu() {
                     'View All Departments',
                     'Add Department',
                     'Quit',
-                ]
+                ],
+                name: 'choice',
             }
         ]);
 
@@ -108,7 +109,7 @@ async function addEmployee() {
                 name: 'department',
             });
 
-            let depIndex = departments.indexOf(resDep.department);
+            let depIndex = dep.indexOf(resDep.department);
             connection.query(
                 `SELECT * FROM roles WHERE department_id = ${availDep[depIndex].id} ORDER BY id`,
                 async function (err2, availRoles) {

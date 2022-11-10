@@ -1,9 +1,17 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const consoleTable = require('console.table');
-const connection = require('./config/connection');
+// could not get this to work
+// const connection = require('./config/connection');
 
 const welcomeMsg = `====== WELCOME TO THE EMPLOYEE MANAGER =======`;
+
+let connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'employee_tracker_db',
+});
 
 connection.connect((err) => {
     if (err) throw err;
@@ -177,6 +185,7 @@ async function addEmployee() {
     );
 };
 
+//Update employee role
 function updateEmployee() {
     connection.query('SELECT * FROM employees', (err, res) => {
         if (err) throw err;
@@ -227,6 +236,7 @@ function updateEmployee() {
     });
 };
 
+// View All roles
 function viewRoles() {
     connection.query(
         'SELECT roles.title AS Role, departments.department_name as Department FROM roles LEFT JOIN departments on roles.department_id = departments.id;',
@@ -238,6 +248,7 @@ function viewRoles() {
     );
 };
 
+// Add a new role
 function addRole() {
     connection.query('SELECT * FROM departments', async function (err, res) {
         if (err) throw err;
@@ -274,6 +285,7 @@ function addRole() {
     });
 };
 
+// View all departments
 function viewDepartment() {
     connection.query(
         'SELECT department_name AS Departments FROM departments;',
@@ -285,6 +297,7 @@ function viewDepartment() {
     );
 };
 
+// Add a new department
 async function addDepartment() {
     const response = await inquirer.prompt({
         type: 'input',

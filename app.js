@@ -238,3 +238,39 @@ function viewRoles() {
     );
 };
 
+function addRole() {
+    connection.query('SELECT * FROM departments', async function (err, res) {
+        if (err) throw err;
+        const dep = res.map((a) => a.department_name);
+        const response = await inquirer.prompt([
+            {
+                type: 'list',
+                message: 'Select a department the role will be in:',
+                choices: dep,
+                name: 'department',
+            },
+            {
+                type: 'input',
+                message: 'Please input the name of the role:',
+                name: 'role',
+            },
+            {
+                type: 'input',
+                message: 'How much is the salary of the new role?',
+                name: 'salary',
+            },
+        ]);
+
+        const index = dep.indexOf(response.department);
+
+        connection.query(
+            `INSERT INTO roles (title, salary, department_id) VALUES ('${response.role}', '${response.salary}', '${res[index].id}');`,
+            function (err2, res) {
+                if (err2) throw err2;
+                console.log(`${response.role} role has been added successfully.`);
+                viewRoles();
+            }
+        );
+    });
+};
+
